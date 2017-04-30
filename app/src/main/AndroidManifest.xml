@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CategoryActivity"  android:parentActivityName=".MainActivity"/>
-        <activity android:name=".QuestionActivity"></activity>
+        <activity android:name=".QuestionActivity" android:parentActivityName=".CategoryActivity" android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>
