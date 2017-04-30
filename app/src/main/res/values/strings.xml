@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">charades</string>
+    <string name="app_name">Charades</string>
+    <string name="button_start">Shall we?</string>
 </resources>
