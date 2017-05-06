@@ -6,14 +6,14 @@ package com.dlac.charades.models;
 
 public class Question {
     private String text;
-    private Category category;
+    private int categoryId;
 
-    public Category getCategory() {
-        return category;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryId(int category) {
+        this.categoryId = category;
     }
 
     public String getText() {
@@ -24,13 +24,13 @@ public class Question {
         this.text = text;
     }
 
-    public Question(Category category, String text ) {
-        this.category = category;
+    public Question(int categoryId, String text ) {
+        this.categoryId = categoryId;
         this.text = text;
     }
 
     @Override
     public String toString() {
-        return "Kategória: " + getCategory() + " Kérdés: " + getText();
+        return "Kategória: " + getCategoryId() + " Kérdés: " + getText();
     }
 }
