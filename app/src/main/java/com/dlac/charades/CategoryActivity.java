@@ -21,32 +21,9 @@ public class CategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         dbHandler = new DBHandler(this);
         setContentView(R.layout.activity_category);
-        //List<Category> categories = createMockData();
         List<Category> categories = dbHandler.getCategories();
 
         GridView gridview = (GridView) findViewById(R.id.grid_category);
         gridview.setAdapter(new CategoryAdapter(this, categories));
-    }
-
-    private List<Category> createMockData() {
-        List<Category> categories = new ArrayList<>();
-
-        for (int i = 0; i < 10; i ++)
-        {
-            Category category = new Category(i, (i + 1) + ". Kategória");
-            categories.add(category);
-        }
-
-        Random random = new Random();
-        List<Question> questions = new ArrayList<>();
-
-        for (int i = 0; i < 150; i++)
-        {
-            Category category = categories.get(random.nextInt(10));
-            Question question = new Question(category, "Valami kérdés" + i);
-            questions.add(question);
-        }
-
-        return categories;
     }
 }
