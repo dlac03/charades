@@ -16,6 +16,7 @@ import com.dlac.charades.models.Question;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class QuestionActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -23,22 +24,56 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
     private Sensor accelerometer;
     private Sensor magnetometer;
     private TextView timer;
+    private TextView questionDisplay;
+    private TextView pointDisplay;
+    private TextView progressDisplay;
+    private Random random;
     private List<Question> questions;
+    private int totalQuestions;
+    private int points = 0;
+    private boolean canSkipToNextQuestion = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
+        initGame();
+    }
 
+    private void initGame()
+    {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         timer = (TextView) findViewById(R.id.textview_timer);
+        questionDisplay = (TextView) findViewById(R.id.textview_question);
+        pointDisplay = (TextView) findViewById(R.id.textview_points);
+        progressDisplay = (TextView) findViewById(R.id.textview_progress);
+        random = new Random();
         questions = loadQuestions();
+        totalQuestions = questions.size();
 
+        updatePointDisplay();
+        updateProgressDisplay();
         setListeners();
+        showNextQuestion();
         initTimer();
     }
+
+    private List<Question> loadQuestions()
+    {
+        List<Question> questionList = new ArrayList<>();
+        Intent categoryIntent = getIntent();
+        Category category = categoryIntent.getParcelableExtra("category");
+        if (category != null)
+        {
+            DBHandler dbHandler = new DBHandler(this);
+            questionList = dbHandler.getQuestions(category);
+        }
+        return  questionList;
+    }
+
 
     protected void setListeners()
     {
@@ -58,23 +93,49 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
 
             public void onFinish()
             {
-                //TODO: Handle end of the game
-                timer.setText("done!");
+                timer.setText("Time expired!");
+                endGame();
             }
         }.start();
     }
 
-    private List<Question> loadQuestions()
-    {
-        List<Question> questionList = new ArrayList<>();
-        Intent categoryIntent = getIntent();
-        Category category = categoryIntent.getParcelableExtra("category");
-        if (category != null)
-        {
-            DBHandler dbHandler = new DBHandler(this);
-            questionList = dbHandler.getQuestions(category);
+
+    private void showNextQuestion() {
+            if (questions != null && questions.size() > 0)
+            {
+                int idx = random.nextInt(questions.size());
+                Question currentQuestion = questions.get(idx);
+                questionDisplay.setText(currentQuestion.getText());
+                questions.remove(idx);
+                updateProgressDisplay();
+            }
+            else
+                endGame();
+    }
+
+    private CountDownTimer nextQuestionTimer = new CountDownTimer((2000), 1000) {
+        public void onTick(long millisUntilFinished) {  canSkipToNextQuestion = false;  }
+        public void onFinish() {
+            canSkipToNextQuestion = true;
+            getWindow().getDecorView().setBackgroundColor(Color.WHITE);
+            showNextQuestion();
         }
-        return  questionList;
+    };
+
+    private void updatePointDisplay()
+    {
+        pointDisplay.setText( totalQuestions + "/" + points);
+    }
+
+    private void updateProgressDisplay()
+    {
+        progressDisplay.setText( totalQuestions - questions.size() + ".kérdés" );
+    }
+
+    private void endGame()
+    {
+        sensorManager.unregisterListener(this);
+        questionDisplay.setText("GAME OVER");
     }
 
     @Override
@@ -123,15 +184,17 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         {
             geomagnetic = event.values;
 
-            if (isTiltDownward())
+            if (canSkipToNextQuestion)
             {
-                getWindow().getDecorView().setBackgroundColor(Color.RED);
-                //TODO: Handle pass
-            }
-            else if (isTiltUpward())
-            {
-                getWindow().getDecorView().setBackgroundColor(Color.GREEN);
-                //TODO: Handle right answer
+                if (isTiltDownward()) {
+                    getWindow().getDecorView().setBackgroundColor(Color.GREEN);
+                    points++;
+                    updatePointDisplay();
+                    nextQuestionTimer.start();
+                } else if (isTiltUpward()) {
+                    getWindow().getDecorView().setBackgroundColor(Color.RED);
+                    nextQuestionTimer.start();
+                }
             }
         }
     }

@@ -13,4 +13,38 @@
         android:gravity="center"
         android:textSize="20sp"
         android:text="Timer" />
+
+    <TextView
+        android:id="@+id/textview_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="45sp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Question" />
+
+    <TextView
+        android:id="@+id/textview_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_above="@id/textview_question"
+        android:text="Progress" />
+
+    <TextView
+        android:id="@+id/textview_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="Points"
+        android:layout_alignParentRight="true"
+        />
+
+
+
 </RelativeLayout>

@@ -27,6 +27,7 @@ public class DBHandler {
     public final static String COLUMN_TEXT = "text";
     public final static String COLUMN_CATEGORY = "category";
     public final static String COLUMN_NAME = "name";
+    public final static String COLUMN_DESCRIPTION = "description";
     public final static String COLUMN_ID = "_id";
 
     protected DBHelper dbHelper;
@@ -44,8 +45,9 @@ public class DBHandler {
         while (!cursor.isAfterLast())
         {
             String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
+            String description = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION));
             int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
-            Category c = new Category(id,name);
+            Category c = new Category(id,name,description);
             categories.add(c);
             cursor.moveToNext();
         }
@@ -62,7 +64,6 @@ public class DBHandler {
         cursor.moveToFirst();
         while (!cursor.isAfterLast())
         {
-            //String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
             int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
             String text = cursor.getString(cursor.getColumnIndex(COLUMN_TEXT));
             Question q = new Question(id,text);
@@ -82,10 +83,11 @@ public class DBHandler {
         db.close();
     }
 
-    public Category addCategory(String name){
+    public Category addCategory(String name, String description){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, name);
+        values.put(COLUMN_DESCRIPTION, description);
         long id = db.insert(TABLE_QUESTIONS, null, values);
         db.close();
         if (id != -1)
@@ -106,7 +108,8 @@ public class DBHandler {
         public void onCreate(SQLiteDatabase db) {
             db.execSQL("CREATE TABLE "+ TABLE_CATEGORIES +"(" +
                     "_id    INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "name   VARCHAR(250)" +
+                    "name   VARCHAR(250)," +
+                    "description   VARCHAR(500)" +
                     ")");
 
             db.execSQL("CREATE TABLE "+ TABLE_QUESTIONS +"(" +
@@ -125,6 +128,7 @@ public class DBHandler {
             {
                 ContentValues c_values = new ContentValues();
                 c_values.put(COLUMN_NAME, i + ". Kategória");
+                c_values.put(COLUMN_DESCRIPTION, "Leírás");
                 db.insert(TABLE_CATEGORIES,null,c_values);
                 for (int j = 0; j < 10; j++)
                 {

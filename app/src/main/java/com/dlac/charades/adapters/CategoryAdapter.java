@@ -79,7 +79,8 @@ public class CategoryAdapter  extends BaseAdapter{
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.Theme_AppCompat_Light_Dialog);
         builder.setMessage(category.getName())
-                .setTitle("Választott kategória");
+                .setTitle("Választott kategória")
+                .setMessage(category.getDescription());
 
         builder.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

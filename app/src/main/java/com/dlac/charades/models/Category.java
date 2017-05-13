@@ -10,21 +10,31 @@ import android.os.Parcelable;
 public class Category implements Parcelable {
 
     private String name;
+    private String description;
     private int id;
 
     public Category(int id, String name) {
         this.id = id;
         this.name = name;
+        this.description = "";
+    }
+
+    public Category(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
     protected Category(Parcel in) {
         name = in.readString();
+        description = in.readString();
         id = in.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
+        dest.writeString(description);
         dest.writeInt(id);
     }
 
@@ -59,6 +69,14 @@ public class Category implements Parcelable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
