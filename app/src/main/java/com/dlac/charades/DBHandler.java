@@ -11,7 +11,6 @@ import com.dlac.charades.models.Question;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Created by dlac on 2017. 05. 06..
@@ -28,7 +27,7 @@ public class DBHandler {
     public final static String COLUMN_TEXT = "text";
     public final static String COLUMN_CATEGORY = "category";
     public final static String COLUMN_NAME = "name";
-    public final static String COLUMN_ID = "id";
+    public final static String COLUMN_ID = "_id";
 
     protected DBHelper dbHelper;
 
@@ -63,7 +62,7 @@ public class DBHandler {
         cursor.moveToFirst();
         while (!cursor.isAfterLast())
         {
-            String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
+            //String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
             int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
             String text = cursor.getString(cursor.getColumnIndex(COLUMN_TEXT));
             Question q = new Question(id,text);
@@ -83,6 +82,17 @@ public class DBHandler {
         db.close();
     }
 
+    public Category addCategory(String name){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, name);
+        long id = db.insert(TABLE_QUESTIONS, null, values);
+        db.close();
+        if (id != -1)
+            return new Category((int)id,name);
+        return null;
+    }
+
 
     public class DBHelper extends SQLiteOpenHelper {
 
@@ -95,12 +105,12 @@ public class DBHandler {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL("CREATE TABLE "+ TABLE_CATEGORIES +"(" +
-                    "id    INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "_id    INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "name   VARCHAR(250)" +
                     ")");
 
             db.execSQL("CREATE TABLE "+ TABLE_QUESTIONS +"(" +
-                    "id    INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "_id    INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "text   VARCHAR(250)," +
                     "category   INTEGER," +
                     "FOREIGN KEY(category) REFERENCES " + TABLE_CATEGORIES + "(_id)" +
@@ -113,9 +123,16 @@ public class DBHandler {
         {
             for (int i = 0; i < 15; i++)
             {
-                ContentValues values = new ContentValues();
-                values.put(COLUMN_NAME, i + ". Kategória");
-                db.insert(TABLE_CATEGORIES,null,values);
+                ContentValues c_values = new ContentValues();
+                c_values.put(COLUMN_NAME, i + ". Kategória");
+                db.insert(TABLE_CATEGORIES,null,c_values);
+                for (int j = 0; j < 10; j++)
+                {
+                    ContentValues q_values = new ContentValues();
+                    q_values.put(COLUMN_CATEGORY, i);
+                    q_values.put(COLUMN_TEXT, j + ". Kérdés");
+                    db.insert(TABLE_QUESTIONS,null,q_values);
+                }
             }
         }
 

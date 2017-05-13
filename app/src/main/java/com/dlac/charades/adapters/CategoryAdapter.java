@@ -10,8 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
-
-import com.dlac.charades.CategoryActivity;
+;
 import com.dlac.charades.QuestionActivity;
 import com.dlac.charades.R;
 import com.dlac.charades.models.Category;
@@ -85,7 +84,7 @@ public class CategoryAdapter  extends BaseAdapter{
         builder.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Intent intent = new Intent(context, QuestionActivity.class);
-                intent.putExtra("category", category.getId());
+                intent.putExtra("category", category);
                 context.startActivity(intent);
             }
         });
