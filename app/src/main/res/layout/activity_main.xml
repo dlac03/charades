@@ -4,13 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dlac.charades.MainActivity">
+    tools:context="com.dlac.charades.MainActivity"
+    android:id="@+id/main_activity"
+    >
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button_start"
+        android:text="TextView"
+        android:textSize="50dp"
+        android:layout_centerHorizontal="true"
+        tools:text="Charades" />
 
     <Button
         android:id="@+id/button_start"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:onClick="StartApplication"
-        android:text="@string/button_start" />
+        android:text="@string/button_start"
+        />
+
 </RelativeLayout>

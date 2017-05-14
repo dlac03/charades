@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Játékmenet"
+        >
+
+        <ListPreference
+            android:key="GAME_LENGTH"
+            android:title="Játékhossz"
+            android:summary="Egy kör hossza"
+            android:entries="@array/length_entries"
+            android:entryValues="@array/length_values" />
+    </PreferenceCategory>
+</PreferenceScreen>

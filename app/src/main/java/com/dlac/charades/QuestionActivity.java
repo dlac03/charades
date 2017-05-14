@@ -1,12 +1,14 @@
 package com.dlac.charades;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
     private TextView progressDisplay;
     private Random random;
     private List<Question> questions;
+    private int gameLength;
     private int totalQuestions;
     private int points = 0;
     private boolean canSkipToNextQuestion = true;
@@ -53,6 +56,9 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         random = new Random();
         questions = loadQuestions();
         totalQuestions = questions.size();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        gameLength = Integer.parseInt(sharedPreferences.getString("GAME_LENGTH","30000"));
 
         updatePointDisplay();
         updateProgressDisplay();
@@ -83,17 +89,16 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
 
     private void initTimer()
     {
-        //TODO: Make game length configurable
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(gameLength, 1000) {
 
             public void onTick(long millisUntilFinished)
             {
-                timer.setText("Time remaining: " + millisUntilFinished / 1000);
+                timer.setText("Hátralévő idő: " + millisUntilFinished / 1000);
             }
 
             public void onFinish()
             {
-                timer.setText("Time expired!");
+                timer.setText("Idő lejárt!");
                 endGame();
             }
         }.start();
