@@ -23,7 +23,9 @@
         <activity
             android:name=".QuestionActivity"
             android:parentActivityName=".CategoryActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoBar"
+            />
         <activity android:name=".SettingsActivity"></activity>
     </application>
 

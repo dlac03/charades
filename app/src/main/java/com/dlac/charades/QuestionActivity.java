@@ -57,14 +57,17 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         questions = loadQuestions();
         totalQuestions = questions.size();
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        gameLength = Integer.parseInt(sharedPreferences.getString("GAME_LENGTH","30000"));
-
+        getGameLength();
         updatePointDisplay();
         updateProgressDisplay();
         setListeners();
         showNextQuestion();
         initTimer();
+    }
+
+    private void getGameLength() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        gameLength = Integer.parseInt(sharedPreferences.getString("GAME_LENGTH","30000"));
     }
 
     private List<Question> loadQuestions()
@@ -93,7 +96,17 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
 
             public void onTick(long millisUntilFinished)
             {
-                timer.setText("Hátralévő idő: " + millisUntilFinished / 1000);
+                long seconds = millisUntilFinished / 1000;
+                long minutes = 0;
+                if (seconds > 60)
+                {
+                    minutes = seconds / 60;
+                    seconds = seconds - (minutes *60);
+                }
+
+                String remainingTime = (minutes > 0 ? minutes + ":" : "") + seconds ;
+
+                timer.setText("Hátralévő idő: " + remainingTime);
             }
 
             public void onFinish()
@@ -129,7 +142,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
 
     private void updatePointDisplay()
     {
-        pointDisplay.setText( totalQuestions + "/" + points);
+        pointDisplay.setText( "Pontok: " + totalQuestions + "/" + points);
     }
 
     private void updateProgressDisplay()
