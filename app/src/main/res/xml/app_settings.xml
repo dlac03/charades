@@ -2,13 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="Játékmenet"
+        android:title="@string/option_category_gameplay"
         >
 
         <ListPreference
             android:key="GAME_LENGTH"
-            android:title="Játékhossz"
-            android:summary="Egy kör hossza"
+            android:title="@string/game_length"
+            android:summary="@string/game_length_desc"
             android:entries="@array/length_entries"
             android:entryValues="@array/length_values" />
     </PreferenceCategory>

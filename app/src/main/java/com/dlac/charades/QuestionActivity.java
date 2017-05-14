@@ -107,7 +107,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
 
                 String remainingTime = (minutes > 0 ? minutes + ":" : "") + seconds ;
 
-                timer.setText("Hátralévő idő: " + remainingTime);
+                timer.setText(getString(R.string.time_remaining) + remainingTime);
             }
 
             public void onFinish()
@@ -148,18 +148,18 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
 
     private void updatePointDisplay()
     {
-        pointDisplay.setText( "Pontok: " + totalQuestions + "/" + points);
+        pointDisplay.setText(getString(R.string.points) + totalQuestions + "/" + points);
     }
 
     private void updateProgressDisplay()
     {
-        progressDisplay.setText( totalQuestions - questions.size() + ".kérdés" );
+        progressDisplay.setText( totalQuestions - questions.size() + getString(R.string.question_nr));
     }
 
     private void endGame()
     {
         sensorManager.unregisterListener(this);
-        questionDisplay.setText("Vége");
+        questionDisplay.setText(getString(R.string.game_over));
     }
 
     @Override
