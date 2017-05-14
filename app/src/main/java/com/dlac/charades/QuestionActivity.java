@@ -136,7 +136,6 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         public void onFinish() {
             canSkipToNextQuestion = true;
             getWindow().getDecorView().setBackgroundColor(Color.WHITE);
-            showNextQuestion();
         }
     };
 
@@ -153,7 +152,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
     private void endGame()
     {
         sensorManager.unregisterListener(this);
-        questionDisplay.setText("GAME OVER");
+        questionDisplay.setText("Vége");
     }
 
     @Override
@@ -209,9 +208,11 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
                     points++;
                     updatePointDisplay();
                     nextQuestionTimer.start();
+                    showNextQuestion();
                 } else if (isTiltUpward()) {
                     getWindow().getDecorView().setBackgroundColor(Color.RED);
                     nextQuestionTimer.start();
+                    showNextQuestion();
                 }
             }
         }
