@@ -35,6 +35,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
     private int totalQuestions;
     private int points = 0;
     private boolean canSkipToNextQuestion = true;
+    private boolean skipToNextQuestion = false;
 
 
     @Override
@@ -136,6 +137,12 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         public void onFinish() {
             canSkipToNextQuestion = true;
             getWindow().getDecorView().setBackgroundColor(Color.WHITE);
+            if (skipToNextQuestion)
+            {
+                showNextQuestion();
+                skipToNextQuestion = false;
+            }
+
         }
     };
 
@@ -207,12 +214,12 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
                     getWindow().getDecorView().setBackgroundColor(Color.GREEN);
                     points++;
                     updatePointDisplay();
+                    skipToNextQuestion = true;
                     nextQuestionTimer.start();
-                    showNextQuestion();
                 } else if (isTiltUpward()) {
                     getWindow().getDecorView().setBackgroundColor(Color.RED);
+                    skipToNextQuestion = true;
                     nextQuestionTimer.start();
-                    showNextQuestion();
                 }
             }
         }
