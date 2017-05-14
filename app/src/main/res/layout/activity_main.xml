@@ -8,15 +8,6 @@
     android:id="@+id/main_activity"
     >
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/button_start"
-        android:text="TextView"
-        android:textSize="50dp"
-        android:layout_centerHorizontal="true"
-        tools:text="Charades" />
 
     <Button
         android:id="@+id/button_start"
@@ -27,5 +18,14 @@
         android:onClick="StartApplication"
         android:text="@string/button_start"
         />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button_start"
+        android:text="Charades"
+        android:textSize="50dp"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
