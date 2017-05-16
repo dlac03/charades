@@ -17,6 +17,7 @@
         android:numColumns="2"
         android:gravity="center"
         android:stretchMode="columnWidth"
+        android:layout_marginTop="?attr/actionBarSize"
         />
 
     <android.support.v7.widget.Toolbar

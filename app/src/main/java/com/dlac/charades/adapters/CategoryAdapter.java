@@ -63,8 +63,10 @@ public class CategoryAdapter  extends BaseAdapter{
         }
         btn.setText(categories.get(position).getName());
         btn.setTextColor(Color.BLACK);
-        btn.setBackgroundColor(Color.GRAY);
+        btn.setBackgroundColor(Color.WHITE);
         btn.setId(position);
+        btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.help_circle, 0, 0);
+
         btn.setOnClickListener(new View.OnClickListener()
         {
             @Override
