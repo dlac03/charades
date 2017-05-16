@@ -11,6 +11,7 @@ import com.dlac.charades.models.Question;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Created by dlac on 2017. 05. 06..
@@ -76,10 +77,7 @@ public class DBHandler {
 
     public void addQuestion(String text, Category c) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_TEXT, text);
-        values.put(COLUMN_CATEGORY, c.getId());
-        db.insert(TABLE_QUESTIONS, null, values);
+        dbHelper.insertQuestion(db,c.getId(),text);
         db.close();
     }
 
@@ -119,25 +117,97 @@ public class DBHandler {
                     "FOREIGN KEY(category) REFERENCES " + TABLE_CATEGORIES + "(_id)" +
                     ")");
 
+            //createMockDataSet(db);
             createInitialDataSet(db);
         }
 
-        private void createInitialDataSet(SQLiteDatabase db)
+        private void createMockDataSet(SQLiteDatabase db)
         {
             for (int i = 0; i < 15; i++)
             {
-                ContentValues c_values = new ContentValues();
-                c_values.put(COLUMN_NAME, i + ". Kategória");
-                c_values.put(COLUMN_DESCRIPTION, "Leírás");
-                db.insert(TABLE_CATEGORIES,null,c_values);
+                insertCategory(db, i + ". Kategória", "Leírás");
+
                 for (int j = 0; j < 10; j++)
                 {
-                    ContentValues q_values = new ContentValues();
-                    q_values.put(COLUMN_CATEGORY, i);
-                    q_values.put(COLUMN_TEXT, j + ". Kérdés");
-                    db.insert(TABLE_QUESTIONS,null,q_values);
+                    insertQuestion(db, i, j + ". Kérdés" );
                 }
             }
+        }
+
+        private void createInitialDataSet (SQLiteDatabase db)
+        {
+            long actorCategoryId = insertCategory(db,"Színészek", "Filmszínészek a nagyvilágból");
+            insertQuestion(db,actorCategoryId,"Hugh Jackman");
+            insertQuestion(db,actorCategoryId,"Patrick Stewart");
+            insertQuestion(db,actorCategoryId,"Matt LeBlanc");
+            insertQuestion(db,actorCategoryId,"William Dafoe");
+            insertQuestion(db,actorCategoryId,"Michael Fassbender");
+            insertQuestion(db,actorCategoryId,"Jennifer Lawrence");
+            insertQuestion(db,actorCategoryId,"Megan Fox");
+            insertQuestion(db,actorCategoryId,"Zoe Saldana");
+            insertQuestion(db,actorCategoryId,"Michelle Rodriguez");
+
+            long rockstarCategoryId = insertCategory(db,"Rocksztárok", "Rocksztárok a rock minden műfajából");
+            insertQuestion(db,rockstarCategoryId,"Eddie Veder");
+            insertQuestion(db,rockstarCategoryId,"Dave Grohl");
+            insertQuestion(db,rockstarCategoryId,"Anthony Kiedis");
+            insertQuestion(db,rockstarCategoryId,"Lemmy Kilmister");
+            insertQuestion(db,rockstarCategoryId,"Jimmy Page");
+            insertQuestion(db,rockstarCategoryId,"James Hetfield");
+            insertQuestion(db,rockstarCategoryId,"Gary Clark Jr.");
+            insertQuestion(db,rockstarCategoryId,"Jack White");
+            insertQuestion(db,rockstarCategoryId,"Kurt Cobain");
+
+            long animalID = insertCategory(db,"Állatok", "Derítsd ki, milyen állat vagy!");
+            insertQuestion(db,animalID,"Gólya");
+            insertQuestion(db,animalID,"Zsiráf");
+            insertQuestion(db,animalID,"Lamantin");
+            insertQuestion(db,animalID,"Delfin");
+            insertQuestion(db,animalID,"Kukac");
+            insertQuestion(db,animalID,"Ebihal");
+            insertQuestion(db,animalID,"Kockásfülű nyúl");
+            insertQuestion(db,animalID,"Jack White");
+            insertQuestion(db,actorCategoryId,"Mókus");
+            insertQuestion(db,actorCategoryId,"Denevér");
+
+            long drugId = insertCategory(db,"Drogok", "Mesélj csak, milyen drog is vagy?");
+            insertQuestion(db,drugId,"MDMA");
+            insertQuestion(db,drugId,"Varázsgomba");
+            insertQuestion(db,drugId,"Fű");
+            insertQuestion(db,drugId,"Kokain");
+            insertQuestion(db,drugId,"Heroin");
+            insertQuestion(db,drugId,"Alkohol");
+            insertQuestion(db,drugId,"Szipuá");
+            insertQuestion(db,drugId,"Meszkalin");
+
+            long movieId = insertCategory(db,"Filmek", "Magyar és külföldi filmek");
+            insertQuestion(db,movieId,"Vissza a jövőbe");
+            insertQuestion(db,movieId,"Valami amerika");
+            insertQuestion(db,movieId,"Nagy utazás");
+            insertQuestion(db,movieId,"Gyűrűk Ura");
+            insertQuestion(db,movieId,"Mátrix");
+            insertQuestion(db,movieId,"Ponyvaregény");
+            insertQuestion(db,movieId,"Shop Stop");
+            insertQuestion(db,movieId,"Donnie Darko");
+            insertQuestion(db,movieId,"Részeges karate mester");
+            insertQuestion(db,movieId,"La La Land");
+        }
+
+        private long insertCategory(SQLiteDatabase db, String name, String description)
+        {
+            ContentValues c_values = new ContentValues();
+            c_values.put(COLUMN_NAME, name);
+            c_values.put(COLUMN_DESCRIPTION, description);
+            long id = db.insert(TABLE_CATEGORIES,null,c_values);
+            return  id;
+        }
+
+        private void insertQuestion(SQLiteDatabase db, long categoryId, String text)
+        {
+            ContentValues q_values = new ContentValues();
+            q_values.put(COLUMN_CATEGORY, categoryId);
+            q_values.put(COLUMN_TEXT, text);
+            db.insert(TABLE_QUESTIONS,null,q_values);
         }
 
         @Override
