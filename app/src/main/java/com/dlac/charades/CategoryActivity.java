@@ -71,9 +71,6 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_about:
-                Toast.makeText(getApplicationContext(),"Charades 1.0 - Detvay László - 2017",Toast.LENGTH_SHORT);
-                break;
             case R.id.action_settings:
                 Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);

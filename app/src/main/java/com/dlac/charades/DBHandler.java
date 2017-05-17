@@ -166,9 +166,8 @@ public class DBHandler {
             insertQuestion(db,animalID,"Kukac");
             insertQuestion(db,animalID,"Ebihal");
             insertQuestion(db,animalID,"Kockásfülű nyúl");
-            insertQuestion(db,animalID,"Jack White");
-            insertQuestion(db,actorCategoryId,"Mókus");
-            insertQuestion(db,actorCategoryId,"Denevér");
+            insertQuestion(db,animalID,"Mókus");
+            insertQuestion(db,animalID,"Denevér");
 
             long drugId = insertCategory(db,"Drogok", "Mesélj csak, milyen drog is vagy?");
             insertQuestion(db,drugId,"MDMA");
