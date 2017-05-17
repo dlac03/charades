@@ -36,6 +36,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
     private Random random;
     private List<Question> questions;
     private ArrayList<String> totalPoints;
+    private CountDownTimer countDownTimer;
     private int gameLength;
     private int totalQuestions;
     private int points = 0;
@@ -135,7 +136,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
 
     private void initTimer()
     {
-        new CountDownTimer(gameLength, 1000) {
+        countDownTimer = new CountDownTimer(gameLength, 1000) {
 
             public void onTick(long millisUntilFinished)
             {
@@ -149,17 +150,22 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
 
                 String remainingTime = (minutes > 0 ? minutes + ":" : "") + seconds ;
 
-                timer.setText(getString(R.string.time_remaining) + remainingTime);
+                timer.setText(getString(R.string.time_remaining) + " " + remainingTime);
             }
 
             public void onFinish()
             {
                 timer.setText(getString(R.string.time_noleft));
-                endGame();
+                endGame(false);
             }
         }.start();
     }
 
+    private void stopTimer()
+    {
+        countDownTimer.cancel();
+        endGame(false);
+    }
 
     private void showNextQuestion() {
             if (questions != null && questions.size() > 0)
@@ -171,7 +177,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
                 updateProgressDisplay();
             }
             else
-                endGame();
+                endGame(true);
     }
 
     private CountDownTimer nextQuestionTimer = new CountDownTimer((2000), 1000) {
@@ -184,13 +190,12 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
                 showNextQuestion();
                 skipToNextQuestion = false;
             }
-
         }
     };
 
     private void updatePointDisplay()
     {
-        pointDisplay.setText(getString(R.string.points) + totalQuestions + "/" + points);
+        pointDisplay.setText(getString(R.string.points) + points + "/" + totalQuestions);
     }
 
     private void updateProgressDisplay()
@@ -198,11 +203,13 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         progressDisplay.setText( totalQuestions - questions.size() + getString(R.string.question_nr));
     }
 
-    private void endGame()
+    private void endGame(boolean stopTimer)
     {
-        sensorManager.unregisterListener(this);
-        totalPoints.add(totalPoints.size() - 1 + "." + getString(R.string.round_nr) + ": " + totalQuestions + "/" + points + " " + getString(R.string.point));
+        if (stopTimer)
+            countDownTimer.cancel();
+        totalPoints.add(totalPoints.size() + 1 + "." + getString(R.string.round_nr) + ": " + totalQuestions + "/" + points + " " + getString(R.string.point));
         questionDisplay.setText(getString(R.string.game_over));
+        sensorManager.unregisterListener(this);
         showButtons();
     }
 
@@ -215,8 +222,14 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
 
     private void restartGame(View v)
     {
-
-
+        points = 0;
+        questions = loadQuestions();
+        showNextQuestion();
+        updatePointDisplay();
+        updateProgressDisplay();
+        hideButtons();
+        setListeners();
+        initTimer();
     }
 
     @Override
