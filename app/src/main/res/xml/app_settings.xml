@@ -10,8 +10,12 @@
             android:entries="@array/length_entries"
             android:entryValues="@array/length_values" />
 
-
-
+        <ListPreference
+            android:key="GAME_TEAMS"
+            android:title="@string/teams_count"
+            android:summary="@string/teams_count_desc"
+            android:entries="@array/team_entries"
+            android:entryValues="@array/team_values" />
 
     </PreferenceCategory>
 </PreferenceScreen>

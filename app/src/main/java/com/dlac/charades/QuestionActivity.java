@@ -31,6 +31,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
     private TextView questionDisplay;
     private TextView pointDisplay;
     private TextView progressDisplay;
+    private TextView teamDisplay;
     private Button restartButton;
     private Button finishButton;
     private Random random;
@@ -40,6 +41,8 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
     private int gameLength;
     private int totalQuestions;
     private int points = 0;
+    private int teams;
+    private int currentTeam = 1;
     private boolean canSkipToNextQuestion = true;
     private boolean skipToNextQuestion = false;
 
@@ -59,6 +62,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         questionDisplay = (TextView) findViewById(R.id.textview_question);
         pointDisplay = (TextView) findViewById(R.id.textview_points);
         progressDisplay = (TextView) findViewById(R.id.textview_progress);
+        teamDisplay = (TextView) findViewById(R.id.textview_teams);
         finishButton = (Button) findViewById(R.id.end_button);
         restartButton = (Button) findViewById(R.id.restart_button);
         random = new Random();
@@ -69,8 +73,10 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         setButtonListeners();
         hideButtons();
         getGameLength();
+        getTeamCount();
         updatePointDisplay();
         updateProgressDisplay();
+        updateTeamDisplay();
         setListeners();
         showNextQuestion();
         initTimer();
@@ -108,10 +114,17 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         });
     }
 
-
     private void getGameLength() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         gameLength = Integer.parseInt(sharedPreferences.getString("GAME_LENGTH","30000"));
+    }
+
+    private void getTeamCount()
+    {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        teams = Integer.parseInt(sharedPreferences.getString("GAME_TEAMS","1"));
+        if (teams == 1)
+            teamDisplay.setVisibility(View.GONE);
     }
 
     private List<Question> loadQuestions()
@@ -203,14 +216,34 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         progressDisplay.setText( totalQuestions - questions.size() + getString(R.string.question_nr));
     }
 
+    private void updateTeamDisplay()
+    {
+        if (teams > 1)
+            teamDisplay.setText(currentTeam + ". " + getString(R.string.team));
+    }
+
+
     private void endGame(boolean stopTimer)
     {
         if (stopTimer)
             countDownTimer.cancel();
-        totalPoints.add(totalPoints.size() + 1 + "." + getString(R.string.round_nr) + ": " + totalQuestions + "/" + points + " " + getString(R.string.point));
+
+        String teamString = teams > 1 ? currentTeam + ".csapat | " : "";
+        int pts = totalPoints.size() + 1;
+        totalPoints.add(teamString + pts + "." + getString(R.string.round_nr) + ": " + totalQuestions + "/" + points + " " + getString(R.string.point));
+
         questionDisplay.setText(getString(R.string.game_over));
         sensorManager.unregisterListener(this);
+        incrementTeam();
         showButtons();
+    }
+
+    private void incrementTeam()
+    {
+        if (currentTeam + 1 <= teams)
+            currentTeam ++;
+        else
+            currentTeam = 1;
     }
 
     private void showResults(View v)
@@ -224,6 +257,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
     {
         points = 0;
         questions = loadQuestions();
+        updateTeamDisplay();
         showNextQuestion();
         updatePointDisplay();
         updateProgressDisplay();

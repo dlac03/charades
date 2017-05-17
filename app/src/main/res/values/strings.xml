@@ -17,4 +17,7 @@
     <string name="results">Eredmények</string>
     <string name="round_nr">kör</string>
     <string name="point">pont</string>
+    <string name="teams_count">Csapatok száma</string>
+    <string name="teams_count_desc">Mennyi csapat vesz részt a játékban</string>
+    <string name="team">Csapat</string>
 </resources>
