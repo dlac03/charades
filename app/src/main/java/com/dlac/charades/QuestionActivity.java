@@ -195,7 +195,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
 
     private void updatePointDisplay()
     {
-        pointDisplay.setText(getString(R.string.points) + points + "/" + totalQuestions);
+        pointDisplay.setText(getString(R.string.points) +  " " + points + "/" + totalQuestions);
     }
 
     private void updateProgressDisplay()
