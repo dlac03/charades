@@ -3,14 +3,18 @@
     <string name="button_start">Start</string>
     <string name="button_continue">Tovább</string>
     <string name="button_cancel">Mégsem</string>
+    <string name="button_repeat">Újra</string>
     <string name="title_activity_settings">Beállítások</string>
     <string name="game_over">Vége</string>
-    <string name="time_remaining">Hátralévő idő:</string>
+    <string name="time_remaining">Hátralévő idő: </string>
+    <string name="time_noleft">Idő lejárt!</string>
     <string name="points">Pontok: </string>
     <string name="question_nr">.kérdés</string>
     <string name="general">.kérdés</string>
     <string name="game_length">Játékhossz</string>
     <string name="game_length_desc">Egy kör hossza</string>
     <string name="option_category_gameplay">Játékmenet</string>
-
+    <string name="results">Eredmények</string>
+    <string name="round_nr">kör</string>
+    <string name="point">pont</string>
 </resources>

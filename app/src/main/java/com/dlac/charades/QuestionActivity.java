@@ -11,6 +11,8 @@ import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.dlac.charades.models.Category;
@@ -29,14 +31,16 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
     private TextView questionDisplay;
     private TextView pointDisplay;
     private TextView progressDisplay;
+    private Button restartButton;
+    private Button finishButton;
     private Random random;
     private List<Question> questions;
+    private ArrayList<String> totalPoints;
     private int gameLength;
     private int totalQuestions;
     private int points = 0;
     private boolean canSkipToNextQuestion = true;
     private boolean skipToNextQuestion = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +58,15 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         questionDisplay = (TextView) findViewById(R.id.textview_question);
         pointDisplay = (TextView) findViewById(R.id.textview_points);
         progressDisplay = (TextView) findViewById(R.id.textview_progress);
+        finishButton = (Button) findViewById(R.id.end_button);
+        restartButton = (Button) findViewById(R.id.restart_button);
         random = new Random();
         questions = loadQuestions();
         totalQuestions = questions.size();
+        totalPoints = new ArrayList<>();
 
+        setButtonListeners();
+        hideButtons();
         getGameLength();
         updatePointDisplay();
         updateProgressDisplay();
@@ -65,6 +74,39 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
         showNextQuestion();
         initTimer();
     }
+
+    private void hideButtons()
+    {
+        restartButton.setVisibility(View.GONE);
+        finishButton.setVisibility(View.GONE);
+    }
+
+
+    private void showButtons()
+    {
+        restartButton.setVisibility(View.VISIBLE);
+        finishButton.setVisibility(View.VISIBLE);
+    }
+
+    private void setButtonListeners()
+    {
+        finishButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                showResults(view);
+            }
+        });
+
+        restartButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                restartGame(view);
+            }
+        });
+    }
+
 
     private void getGameLength() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -112,7 +154,7 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
 
             public void onFinish()
             {
-                timer.setText("Idő lejárt!");
+                timer.setText(getString(R.string.time_noleft));
                 endGame();
             }
         }.start();
@@ -159,7 +201,22 @@ public class QuestionActivity extends AppCompatActivity implements SensorEventLi
     private void endGame()
     {
         sensorManager.unregisterListener(this);
+        totalPoints.add(totalPoints.size() - 1 + "." + getString(R.string.round_nr) + ": " + totalQuestions + "/" + points + " " + getString(R.string.point));
         questionDisplay.setText(getString(R.string.game_over));
+        showButtons();
+    }
+
+    private void showResults(View v)
+    {
+        Intent i = new Intent(this, ResultActivity.class);
+        i.putStringArrayListExtra("points", totalPoints);
+        v.getContext().startActivity(i);
+    }
+
+    private void restartGame(View v)
+    {
+
+
     }
 
     @Override
